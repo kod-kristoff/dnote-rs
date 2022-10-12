@@ -2,7 +2,7 @@ use clap::{
     builder::{StringValueParser, TypedValueParser},
     crate_authors, crate_description, crate_name, crate_version, Arg, Command,
 };
-use dnote::value_objects::BookName;
+use dnote::{use_cases::AddingNote, value_objects::BookName};
 
 fn main() {
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("trace"))
@@ -22,8 +22,16 @@ fn try_main() -> eyre::Result<()> {
     match matches.subcommand() {
         Some(("add", submatches)) => {
             log::trace!("command 'add'");
-            let bookname = submatches.get_one::<String>("book");
+            let bookname = submatches.get_one::<BookName>("book");
             log::debug!("bookname = {:?}", bookname);
+
+            let content = match submatches.get_one::<String>("content") {
+                Some(content) => content,
+                None => todo!("open editor"),
+            };
+            log::debug!("content = '{}'", content);
+
+            let uc = AddingNote::new();
         }
         _ => todo!(),
     }
