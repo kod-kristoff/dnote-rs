@@ -22,7 +22,7 @@ fn try_main() -> eyre::Result<()> {
     match matches.subcommand() {
         Some(("add", submatches)) => {
             log::trace!("command 'add'");
-            let bookname = submatches.get_one::<BookName>("book");
+            let bookname = submatches.get_one::<BookName>("book").expect("required");
             log::debug!("bookname = {:?}", bookname);
 
             let content = match submatches.get_one::<String>("content") {
@@ -32,6 +32,7 @@ fn try_main() -> eyre::Result<()> {
             log::debug!("content = '{}'", content);
 
             let uc = AddingNote::new();
+            uc.execute(bookname, content);
         }
         _ => todo!(),
     }

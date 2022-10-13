@@ -8,7 +8,8 @@ impl AddingNote {
         Self {}
     }
 
-    pub fn execute(&self, book: BookName, content: String) {
+    pub fn execute(&self, book: &BookName, content: &String) {
         log::trace!("called AddingNote::execute");
+        todo!("Add '{}' to book '{}'", content, book)
     }
 }
