@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use clap::{
     builder::{StringValueParser, TypedValueParser},
     crate_authors, crate_description, crate_name, crate_version, Arg, Command,
@@ -30,8 +32,8 @@ fn try_main() -> eyre::Result<()> {
                 None => todo!("open editor"),
             };
             log::debug!("content = '{}'", content);
-
-            let uc = AddingNote::new();
+            let book_repo = Arc::new(dnote_infra::repositories::SqlBookRepo::new());
+            let uc = AddingNote::new(book_repo);
             uc.execute(bookname, content);
         }
         _ => todo!(),

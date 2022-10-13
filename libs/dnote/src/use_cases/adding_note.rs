@@ -1,15 +1,20 @@
-use crate::value_objects::BookName;
+use std::sync::Arc;
 
-pub struct AddingNote {}
+use crate::{repositories::books::BookRepo, value_objects::BookName, Error};
+
+pub struct AddingNote {
+    book_repo: Arc<dyn BookRepo>,
+}
 
 impl AddingNote {
-    pub fn new() -> Self {
+    pub fn new(book_repo: Arc<dyn BookRepo>) -> Self {
         log::trace!("creating use case AddingNote");
-        Self {}
+        Self { book_repo }
     }
 
-    pub fn execute(&self, book: &BookName, content: &String) {
+    pub fn execute(&self, book_name: &BookName, content: &String) -> Result<(), Error> {
         log::trace!("called AddingNote::execute");
-        todo!("Add '{}' to book '{}'", content, book)
+        let book = self.book_repo.get_by_label(book_name)?;
+        todo!("Add '{}' to book '{}'", content, book_name)
     }
 }
